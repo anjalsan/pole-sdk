@@ -7,6 +7,7 @@ import android.view.View;
 import beacon_sdk.poletalks.com.pole_sdk.PoleProximityManager;
 import beacon_sdk.poletalks.com.pole_sdk.PoleView;
 
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
