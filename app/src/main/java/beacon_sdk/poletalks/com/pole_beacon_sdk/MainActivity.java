@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import beacon_sdk.poletalks.com.pole_sdk.PoleProximityManager;
-import beacon_sdk.poletalks.com.pole_sdk.PoleView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -14,9 +13,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        View v = new PoleView(this);
-        setContentView(v);
 
         PoleProximityManager.onCreateBeacons(this, "SqsMXrtfSNncgUTHgiAzRSbLlnNruZxN");
     }
@@ -33,13 +29,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
-        PoleProximityManager.stopScanning();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
+        PoleProximityManager.stopScanning();
         PoleProximityManager.destroyScanning();
     }
 }

@@ -9,6 +9,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
@@ -37,33 +39,37 @@ public class PoleProximityManager {
         KontaktSDK.initialize(beacons_id);
 
         proximityManager = ProximityManagerFactory.create(mContext);
-        proximityManager.setIBeaconListener(createIBeaconListener());
+//        proximityManager.setIBeaconListener(createIBeaconListener());
         proximityManager.setEddystoneListener(createEddystoneListener());
     }
 
-    private static IBeaconListener createIBeaconListener() {
-        return new SimpleIBeaconListener() {
-            @Override
-            public void onIBeaconDiscovered(IBeaconDevice ibeacon, IBeaconRegion region) {
-                createNotification("Welcome to "+ibeacon.getUniqueId(), "Hope you have an awesome time.");
-            }
-
-            @Override
-            public void onIBeaconLost(IBeaconDevice iBeacon, IBeaconRegion region) {
-                createNotification("Hope you had a great time!", "Please give us your feedback");
-            }
-        };
-    }
+//    private static IBeaconListener createIBeaconListener() {
+//        return new SimpleIBeaconListener() {
+//            @Override
+//            public void onIBeaconDiscovered(IBeaconDevice iBeacon, IBeaconRegion region) {
+//                Log.e("Pole Enter ", iBeacon.getUniqueId());
+//                createNotification("Welcome to "+iBeacon.getUniqueId(), "Hope you have an awesome time.");
+//            }
+//
+//            @Override
+//            public void onIBeaconLost(IBeaconDevice iBeacon, IBeaconRegion region) {
+//                Log.e("Pole Exit ", iBeacon.getUniqueId());
+//                createNotification("Hope you had a great time!", "Please give us your feedback");
+//            }
+//        };
+//    }
 
     private static EddystoneListener createEddystoneListener() {
         return new SimpleEddystoneListener() {
             @Override
             public void onEddystoneDiscovered(IEddystoneDevice eddystone, IEddystoneNamespace namespace) {
+                Log.e("Pole Enter ", eddystone.getUniqueId());
                 createNotification("Welcome to "+eddystone.getUniqueId(), "Hope you have an awesome time.");
             }
 
             @Override
             public void onEddystoneLost(IEddystoneDevice eddystone, IEddystoneNamespace namespace) {
+                Log.e("Pole Exit ", eddystone.getUniqueId());
                 createNotification("Hope you had a great time!", "Please give us your feedback");
             }
         };
@@ -72,7 +78,7 @@ public class PoleProximityManager {
     private static void createNotification(String title, String content) {
         try {
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext);
-            Intent resultIntent = new Intent();
+            Intent resultIntent = new Intent(mContext, FeedbackActivity.class);
 
             Bitmap icon = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.brandlog);
             Integer notificationId = Integer.valueOf(String.valueOf((System.currentTimeMillis() / 1000000)));
@@ -100,7 +106,6 @@ public class PoleProximityManager {
             mBuilder.setAutoCancel(true);
             mNotificationManager.notify(notificationId, mBuilder.build());
         } catch (Exception e){
-
         }
 
     }

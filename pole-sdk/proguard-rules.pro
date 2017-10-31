@@ -25,8 +25,31 @@
 #-renamesourcefileattribute SourceFile
 
 
+-keep class com.google.android.gms.** {*;}
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
+-dontwarn com.squareup.okhttp.**
+-dontwarn rx.**
+-dontwarn retrofit.**
+-keep class retrofit.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit.http.* <methods>;
+}
+-keep class sun.misc.Unsafe { *; }
+-dontwarn java.nio.file.*
+-keep class beacon_sdk.poletalks.com.pole_sdk.RetrofitSupport.*{*;}
+-keep class beacon_sdk.poletalks.com.pole_sdk.Model.*{*;}
+
+
+#----------------------------
+
+
 -dontwarn okio.**
 -dontwarn retrofit2.**
+
+#----------------------------
+
+
 -keep class retrofit2.** { *; }
 -keepattributes Signature
 -keepattributes Exceptions
