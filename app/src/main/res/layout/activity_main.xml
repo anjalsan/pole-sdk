@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="beacon_sdk.poletalks.com.pole_beacon_sdk.MainActivity">
+    tools:context="org.poletalks.sdk.android.MainActivity">
 
     <TextView
         android:layout_width="wrap_content"

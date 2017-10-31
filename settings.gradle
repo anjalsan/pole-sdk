@@ -1,1 +1,1 @@
-include ':app', ':pole-sdk'
+include ':app', ':pole_android_sdk'

@@ -74,6 +74,24 @@ protected void onDestroy() {
 }
 ```
 
+7. Project build.config
+
+```
+buildscript {
+    dependencies {
+        classpath 'com.google.gms:google-services:3.0.0'
+    }
+}
+```
+
+8. Some configurations may also need an additional exclusion (if you are getting errors during Gradle sync):
+
+```
+ packagingOptions {
+     exclude 'main/AndroidManifest.xml'
+ }
+```
+
 Samples App
 ===========
 For SDK usage samples see the [Samples App](https://github.com/anjalsan/pole-sdk)
