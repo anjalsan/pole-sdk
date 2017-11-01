@@ -52,7 +52,7 @@ public class MyInstanceIDListenerService extends FirebaseInstanceIdService {
 
 
     private void sendRegistrationToServer(String refreshedToken) {
-        final SharedPreferences pref = getSharedPreferences("OTP", Context.MODE_PRIVATE);
+        final SharedPreferences pref = getSharedPreferences("PolePref", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.putString("fcm_token", refreshedToken);
         editor.commit();
