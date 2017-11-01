@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
-        applicationId "beacon_sdk.poletalks.com.pole_beacon_sdk"
+        applicationId "org.poletalks.sdk.android"
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 1
@@ -30,3 +30,5 @@ dependencies {
 //    compile 'com.github.anjalsan:pole-sdk:3.0'
     compile project(':pole_android_sdk')
 }
+
+apply plugin: 'com.google.gms.google-services'
