@@ -10,6 +10,8 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 import org.poletalks.sdk.pole_android_sdk.RetrofitSupport.ApiInterface;
 import org.poletalks.sdk.pole_android_sdk.RetrofitSupport.RetrofitConfig;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,9 +33,19 @@ public class MyInstanceIDListenerService extends FirebaseInstanceIdService {
     // [START refresh_token]
     @Override
     public void onTokenRefresh() {
-        // Get updated InstanceID token.
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d("MyInstanceId", "Refreshed token: " + refreshedToken);
+//        // Get updated InstanceID token.
+//        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+//        Log.d("MyInstanceId", "Refreshed token: " + refreshedToken);
+//        // TODO: Implement this method to send any registration to your app's servers.
+//        sendRegistrationToServer(refreshedToken);
+
+        String refreshedToken = null;
+        try {
+            refreshedToken = FirebaseInstanceId.getInstance().getToken("732877727331", "FCM");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.d("MyInstanceId", "sdk:Refreshed token: " + refreshedToken);
         // TODO: Implement this method to send any registration to your app's servers.
         sendRegistrationToServer(refreshedToken);
     }
