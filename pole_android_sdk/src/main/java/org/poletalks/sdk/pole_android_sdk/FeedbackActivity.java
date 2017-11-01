@@ -42,24 +42,26 @@ public class FeedbackActivity extends AppCompatActivity {
         String refreshedToken = null;
         try {
             refreshedToken = FirebaseInstanceId.getInstance().getToken("732877727331", "FCM");
+            Log.d("MyInstanceId", "sdk:Refreshed token in feedback: " + refreshedToken);
+            // TODO: Implement this method to send any registration to your app's servers.
+            sendRegistrationToServer(refreshedToken);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Log.d("MyInstanceId", "sdk:Refreshed token: " + refreshedToken);
-        // TODO: Implement this method to send any registration to your app's servers.
-        sendRegistrationToServer(refreshedToken);
+
     }
 
     private void sendRegistrationToServer(String refreshedToken) {
         final SharedPreferences pref = getSharedPreferences("OTP", Context.MODE_PRIVATE);
 
-        if (pref.getString("fcm_token", null) != null){
+        if (pref.getString("fcm_token", null) == null){
             SharedPreferences.Editor editor = pref.edit();
             editor.putString("fcm_token", refreshedToken);
             editor.commit();
+
+            Log.e("fcm_token", refreshedToken);
         }
 
-        Log.e("fcm_token", refreshedToken);
 
 //        if (CheckNetwork.isInternetAvailable(getApplicationContext()))
 //        {
