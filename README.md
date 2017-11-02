@@ -103,6 +103,10 @@ send [senderId](https://firebase.google.com/docs/cloud-messaging/concept-options
     ```
     @Override
     public void onMessageReceived(RemoteMessage message) {
+
+     if (PoleNotificationService.onMessageReceived(message, mContext)){
+       //call notification generate function here. basically this function will generate if its pole notification and return false else return true,
+     }
         
     }
     ```

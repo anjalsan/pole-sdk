@@ -33,8 +33,9 @@ public class MyFcmListenerService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage message) {
         String from = message.getFrom();
         data = message.getData();
-        Log.d("FIREBASE", "NOTIFICATION");
-        generateNotification(data);
+        if (PoleNotificationService.onMessageReceived(message, mContext)){
+            generateNotification(data);
+        }
     }
 
     private void generateNotification(Map data) {

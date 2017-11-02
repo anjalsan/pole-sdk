@@ -13,7 +13,6 @@ import com.google.gson.JsonObject;
 import org.poletalks.sdk.pole_android_sdk.Model.LoginResponse;
 import org.poletalks.sdk.pole_android_sdk.RetrofitSupport.ApiInterface;
 import org.poletalks.sdk.pole_android_sdk.RetrofitSupport.RetrofitConfig;
-import org.poletalks.sdk.pole_android_sdk.Utils.PoleNotificationService;
 
 import java.io.IOException;
 
