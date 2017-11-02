@@ -84,17 +84,12 @@ buildscript {
 }
 ```
 
-8. If Firebase is already used in project Add this code. else ignore.
-
- [Receiving messages from multiple senders](https://firebase.google.com/docs/cloud-messaging/concept-options#receiving-messages-from-multiple-senders). When requesting registration 
-send [senderId](https://firebase.google.com/docs/cloud-messaging/concept-options#senderid)
-
-
+8. Some configurations may also need an additional exclusion (if you are getting errors during Gradle sync):
 
 ```
-refreshedToken = FirebaseInstanceId.getInstance().getToken("YOUR_SENDERID", "FCM");
-PoleNotificationService.getToken(FirebaseInstanceId.getInstance());
-
+ packagingOptions {
+     exclude 'main/AndroidManifest.xml'
+ }
 ```
 
 Samples App
