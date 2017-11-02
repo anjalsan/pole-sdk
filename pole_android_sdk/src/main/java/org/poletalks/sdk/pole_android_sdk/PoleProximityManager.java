@@ -11,6 +11,8 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.ble.manager.ProximityManagerFactory;
@@ -20,6 +22,8 @@ import com.kontakt.sdk.android.common.KontaktSDK;
 import com.kontakt.sdk.android.common.profile.IEddystoneDevice;
 import com.kontakt.sdk.android.common.profile.IEddystoneNamespace;
 
+import org.poletalks.sdk.pole_android_sdk.Model.Queue;
+
 /**
  * Created by anjal on 10/30/17.
  */
@@ -28,46 +32,51 @@ public class PoleProximityManager {
 
     private static Context mContext;
     public static ProximityManager proximityManager;
+    public static String TASKS = "tasks-test";
+    private static DatabaseReference mFirebaseHistoryReference;
+    private static SharedPreferences polePref;
 
-    public static void onCreateBeacons(Context context, String beacons_id){
+    public static void onCreateBeacons(Context context, String beacons_id, String uid){
         mContext= context;
         KontaktSDK.initialize(beacons_id);
 
+        polePref = context.getSharedPreferences("polePref", Context.MODE_PRIVATE);
+
+        if (uid != null){
+            SharedPreferences.Editor editor = polePref.edit();
+            editor.putString("uid", uid);
+            editor.apply();
+        }
+
         proximityManager = ProximityManagerFactory.create(mContext);
-//        proximityManager.setIBeaconListener(createIBeaconListener());
-        proximityManager.setEddystoneListener(createEddystoneListener());
+        proximityManager.setEddystoneListener(createEddystoneListener(mContext));
     }
 
-//    private static IBeaconListener createIBeaconListener() {
-//        return new SimpleIBeaconListener() {
-//            @Override
-//            public void onIBeaconDiscovered(IBeaconDevice iBeacon, IBeaconRegion region) {
-//                Log.e("Pole Enter ", iBeacon.getUniqueId());
-//                createNotification("Welcome to "+iBeacon.getUniqueId(), "Hope you have an awesome time.");
-//            }
-//
-//            @Override
-//            public void onIBeaconLost(IBeaconDevice iBeacon, IBeaconRegion region) {
-//                Log.e("Pole Exit ", iBeacon.getUniqueId());
-//                createNotification("Hope you had a great time!", "Please give us your feedback");
-//            }
-//        };
-//    }
 
-    private static EddystoneListener createEddystoneListener() {
+    private static EddystoneListener createEddystoneListener(final Context mContext) {
         return new SimpleEddystoneListener() {
             @Override
             public void onEddystoneDiscovered(IEddystoneDevice eddystone, IEddystoneNamespace namespace) {
                 Log.e("Pole Enter ", eddystone.getUniqueId());
                 createNotification("Welcome to "+eddystone.getUniqueId(), "Hope you have an awesome time.");
+                setInFirebase(eddystone.getUniqueId(), eddystone.getDistance(), true, mContext);
             }
 
             @Override
             public void onEddystoneLost(IEddystoneDevice eddystone, IEddystoneNamespace namespace) {
                 Log.e("Pole Exit ", eddystone.getUniqueId());
                 createNotification("Hope you had a great time!", "Please give us your feedback");
+                setInFirebase(eddystone.getUniqueId(), eddystone.getDistance(), false, mContext);
             }
         };
+    }
+
+    private static void setInFirebase(String beacon_id, double distance, boolean isEnter, Context context) {
+        SharedPreferences pref = context.getSharedPreferences("polePref", Context.MODE_PRIVATE);
+        String user_id = pref.getString("uid", "none");
+        mFirebaseHistoryReference = FirebaseDatabase.getInstance().getReference();
+        Queue queue = new Queue(beacon_id, user_id, distance, isEnter);
+        mFirebaseHistoryReference.child(TASKS).push().setValue(queue);
     }
 
     private static void createNotification(String title, String content) {
